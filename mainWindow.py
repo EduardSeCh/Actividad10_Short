@@ -50,8 +50,13 @@ class MainWindow(QMainWindow):
         for particula in self.particulas:
             listParticulas.append(particula)
         listParticulas.sort()
+        #Tabla
+        self.baseTabla()
+        row = 0
         for particula in listParticulas:
             self.ui.salida.insertPlainText(str(particula)+'\n')
+            self.viewData(row,particula)
+            row +=1
         
     @Slot()
     def ordenarVelocidades(self):
@@ -60,9 +65,13 @@ class MainWindow(QMainWindow):
         for particula in self.particulas:
             listParticulas.append(particula)
         listParticulas.sort(key=lambda particula:particula.velocidad)
-        
+        self.baseTabla()
+        row = 0
         for particulaordenada in listParticulas:
             self.ui.salida.insertPlainText(str(particulaordenada)+'\n')
+            self.viewData(row,particulaordenada)
+            row +=1 
+            
     
     @Slot()
     def ordenarDistancias(self):
@@ -71,9 +80,12 @@ class MainWindow(QMainWindow):
         for particula in self.particulas:
             listParticulas.append(particula)
         listParticulas.sort(key=lambda particula:particula.distancia,reverse=True)
-        
+        self.baseTabla()
+        row = 0
         for particulaordenada in listParticulas:
             self.ui.salida.insertPlainText(str(particulaordenada)+'\n')
+            self.viewData(row,particulaordenada)
+            row +=1 
     
     @Slot()
     def dibujar(self):
@@ -120,15 +132,18 @@ class MainWindow(QMainWindow):
     
     @Slot()
     def mostrarTabla(self):
+        self.baseTabla()
+        row = 0
+        for particula in self.particulas:
+            self.viewData(row,particula)
+            row +=1 
+    
+    def baseTabla(self):
         self.ui.tableWidget.setColumnCount(10)
         headers = ["id","origen_x","origen_y","destino_x",
                   "destino_y","velocidad","red","green","blue","distancia"]
         self.ui.tableWidget.setHorizontalHeaderLabels(headers)    
         self.ui.tableWidget.setRowCount(len(self.particulas))
-        row = 0
-        for particula in self.particulas:
-            self.viewData(row,particula)
-            row +=1 
        
     def viewData(self,row,particula):
         id_widget = QTableWidgetItem(str(particula.id))
